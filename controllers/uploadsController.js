@@ -3,6 +3,7 @@ const path = require('path')
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../errors');
 const cloudinary = require('cloudinary').v2
+const fs = require('fs')
 
 //for local uploads
 const uploadProductImageLocal = async (req, res) => {
@@ -37,7 +38,8 @@ const result = await cloudinary.uploader.upload(
           folder: 'file-upload',
      }
      );
-     console.log(result)
+     fs.unlinkSync(req.files.image.tempFilePath)
+     return res.status(StatusCodes.OK).json({src: result.secure_url})
 }
 
 
